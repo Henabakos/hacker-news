@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-interface Article {
+export interface Article {
   source: {
     id: string | null;
     name: string;

@@ -1,24 +1,35 @@
 "use client";
+
 import { fetchTopHeadlines } from "@/utils/api";
 import ArticleList from "@/components/ArticleList";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
+import { Article } from "@/components/ArticleList";
 
-export default function HomePage() {
+function HomePageContent() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const currentPage = parseInt(searchParams.get("page") || "1", 12);
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function loadArticles() {
       setLoading(true);
-      const fetchedArticles = await fetchTopHeadlines("bbc-news", currentPage);
-      setArticles(fetchedArticles);
-      setLoading(false);
+      try {
+        const fetchedArticles = await fetchTopHeadlines(
+          "bbc-news",
+          currentPage
+        );
+        setArticles(fetchedArticles);
+      } catch (error) {
+        console.error("Failed to fetch articles:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     loadArticles();
   }, [currentPage]);
@@ -93,5 +104,13 @@ export default function HomePage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<p>Loading page...</p>}>
+      <HomePageContent />
+    </Suspense>
   );
 }

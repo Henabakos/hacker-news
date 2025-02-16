@@ -3,6 +3,7 @@ import { fetchArticles } from "@/utils/api";
 import ArticleList from "@/components/ArticleList";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Article } from "@/components/ArticleList";
 
 export default function ArticlesPage({
   params,
@@ -14,7 +15,7 @@ export default function ArticlesPage({
   const pathname = usePathname();
   const router = useRouter();
   const currentPage = parseInt(searchParams.get("page") || "1", 12);
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
