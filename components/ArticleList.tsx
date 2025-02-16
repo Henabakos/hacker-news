@@ -1,5 +1,5 @@
 import React from "react";
-
+import Image from "next/image";
 interface Article {
   source: {
     id: string | null;
@@ -29,9 +29,11 @@ export default function ArticleList({ articles }: ArticleListProps) {
             className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
           >
             {article.urlToImage && (
-              <img
-                src={article.urlToImage}
+              <Image
+                src={article.urlToImage || "/default-image.jpg"}
                 alt={article.title}
+                width={384}
+                height={216}
                 className="w-full h-48 object-cover"
               />
             )}

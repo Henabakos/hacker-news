@@ -1,5 +1,6 @@
 import ArticleList from "@/components/ArticleList";
 import { fetchTopHeadlines } from "@/utils/api";
+import Image from "next/image";
 
 export default async function HomePage() {
   const articles = await fetchTopHeadlines("bbc-news");
@@ -17,9 +18,11 @@ export default async function HomePage() {
 
       {featuredArticle && (
         <section className="mb-8 bg-gray-100 rounded-lg shadow-lg overflow-hidden">
-          <img
+          <Image
             src={featuredArticle.urlToImage || "/default-image.jpg"}
             alt={featuredArticle.title}
+            width={640}
+            height={360}
             className="w-full h-64 object-cover"
           />
           <div className="p-6">

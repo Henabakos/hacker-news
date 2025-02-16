@@ -24,7 +24,9 @@ export default async function ArticlesPage({
         }}
       >
         <div className="bg-black bg-opacity-50 p-8 rounded-lg">
-          <h1 className="text-4xl font-bold">Latest Articles on "{query}"`</h1>
+          <h1 className="text-4xl font-bold">
+            Latest Articles on &ldquo;{query}&rdquo;
+          </h1>
           <p className="mt-2 text-lg text-gray-300">
             Stay updated with the most recent news, reports, and in-depth
             analysis on {query}.
