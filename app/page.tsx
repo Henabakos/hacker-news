@@ -1,9 +1,34 @@
-import ArticleList from "@/components/ArticleList";
+"use client";
 import { fetchTopHeadlines } from "@/utils/api";
+import ArticleList from "@/components/ArticleList";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
-export default async function HomePage() {
-  const articles = await fetchTopHeadlines("bbc-news");
+export default function HomePage() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const currentPage = parseInt(searchParams.get("page") || "1", 12);
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadArticles() {
+      setLoading(true);
+      const fetchedArticles = await fetchTopHeadlines("bbc-news", currentPage);
+      setArticles(fetchedArticles);
+      setLoading(false);
+    }
+    loadArticles();
+  }, [currentPage]);
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage.toString());
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const featuredArticle = articles.length > 0 ? articles[0] : null;
 
   return (
@@ -48,7 +73,24 @@ export default async function HomePage() {
       )}
 
       <div className="bg-white shadow-md p-6 rounded-lg">
-        <ArticleList articles={articles} />
+        {loading ? <p>Loading...</p> : <ArticleList articles={articles} />}
+      </div>
+
+      <div className="flex justify-between mt-6">
+        <button
+          className="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage <= 1}
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2">Page {currentPage}</span>
+        <button
+          className="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

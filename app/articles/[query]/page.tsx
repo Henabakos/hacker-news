@@ -1,13 +1,38 @@
+"use client";
 import { fetchArticles } from "@/utils/api";
 import ArticleList from "@/components/ArticleList";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 
-export default async function ArticlesPage({
+export default function ArticlesPage({
   params,
 }: {
   params: { query: string };
 }) {
   const query = decodeURIComponent(params.query);
-  const articles = await fetchArticles(query);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const currentPage = parseInt(searchParams.get("page") || "1", 12);
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadArticles() {
+      setLoading(true);
+      const fetchedArticles = await fetchArticles(query, currentPage);
+      setArticles(fetchedArticles);
+      setLoading(false);
+    }
+    loadArticles();
+  }, [query, currentPage]);
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage.toString());
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const featuredArticle = articles.length > 0 ? articles[0] : null;
 
   return (
@@ -35,7 +60,24 @@ export default async function ArticlesPage({
       </section>
 
       <div className="bg-white shadow-md p-6 rounded-lg">
-        <ArticleList articles={articles} />
+        {loading ? <p>Loading...</p> : <ArticleList articles={articles} />}
+      </div>
+
+      <div className="flex justify-between mt-6">
+        <button
+          className="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage <= 1}
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2">Page {currentPage}</span>
+        <button
+          className="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
