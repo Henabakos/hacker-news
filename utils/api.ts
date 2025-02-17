@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const base_URL = "https://newsapi.org/v2/everything";
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY as string;
 
 export async function fetchArticles(query: string, page = 1, pageSize = 12) {
   try {
@@ -11,6 +11,10 @@ export async function fetchArticles(query: string, page = 1, pageSize = 12) {
         apiKey: API_KEY,
         page: page,
         pagesize: pageSize,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
     });
     return response.data.articles;
@@ -24,7 +28,7 @@ export async function fetchTopHeadlines(
   source: string,
   page = 1,
   pageSize = 10
-) {
+): Promise<any[]> {
   try {
     const response = await axios.get(`${base_URL}`, {
       params: {
@@ -32,6 +36,10 @@ export async function fetchTopHeadlines(
         page: page,
         pagesize: pageSize,
         apiKey: API_KEY,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
     });
     return response.data.articles;
