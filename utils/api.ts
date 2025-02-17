@@ -3,7 +3,7 @@ import axios from "axios";
 const base_URL = "https://newsapi.org/v2/everything";
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY as string;
 
-export async function fetchArticles(query: string, page = 1, pageSize = 10) {
+export async function fetchArticles(query: string, page = 1, pageSize = 12) {
   try {
     const response = await axios.get(`${base_URL}`, {
       params: {
@@ -12,10 +12,7 @@ export async function fetchArticles(query: string, page = 1, pageSize = 10) {
         page: page,
         pagesize: pageSize,
       },
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
     return response.data.articles;
   } catch (error) {
@@ -28,7 +25,7 @@ export async function fetchTopHeadlines(
   source: string,
   page = 1,
   pageSize = 10
-): Promise<any[]> {
+) {
   try {
     const response = await axios.get(`${base_URL}`, {
       params: {
@@ -37,10 +34,7 @@ export async function fetchTopHeadlines(
         pagesize: pageSize,
         apiKey: API_KEY,
       },
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
     return response.data.articles;
   } catch (error) {
