@@ -1,6 +1,6 @@
 <div align="center">
   <h1>📰 News Explorer App</h1>
-  <p>A modern news application built with Next.js 14, TypeScript, and Shadcn UI.</p>
+  <p>A modern news application built with Next.js 14, TypeScript, and Tailwind.</p>
 </div>
 
 ---
@@ -18,6 +18,16 @@ The **News Explorer App** is a powerful tool that allows you to search for the l
 ✅ **Modern UI** – Built with Tailwind CSS for a sleek and professional look.
 
 ---
+
+## Preview Of The Project
+
+#### 1.Home Page with Latest News On the top
+
+![Banner](public/ban1.png)
+
+#### 2.Search Functionality with Pagination
+
+![Banner](public/ban2.png)
 
 ## 🛠️ Getting Started
 
